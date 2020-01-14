@@ -42,18 +42,3 @@ class Challenge:
 
     def clone_template(self, template):
         Git().clone('--progress ' + template['git_addr'])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

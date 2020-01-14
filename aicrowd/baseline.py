@@ -32,9 +32,3 @@ def list(info: Info):
 
 baseline_command.add_command(download)
 baseline_command.add_command(list)
-
-
-
-
-
-

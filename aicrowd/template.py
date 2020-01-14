@@ -32,10 +32,3 @@ def list(info: Info):
 
 template_command.add_command(download)
 template_command.add_command(list)
-
-
-
-
-
-
-

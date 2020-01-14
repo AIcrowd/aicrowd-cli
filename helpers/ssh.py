@@ -33,5 +33,3 @@ class SSHHandler():
         except Exception as e:
             logging.debug(e)
             logging.info("Please generate ssh keys")
-
-

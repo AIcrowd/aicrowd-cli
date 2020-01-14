@@ -29,11 +29,3 @@ def submit_command(info: Info, version_number):
     challenge_json['personal_access_token'] = info.personal_access_token
     submission = Submission(**challenge_json)
     submission.submit_current_project(version_number)
-
-
-
-
-
-
-
-

@@ -28,14 +28,3 @@ class Config:
         with open(self.config_file, "w") as f:
             self.dump(updated_list_doc, f)
             self.settings = updated_list_doc
-
-
-
-
-
-
-
-
-
-
-

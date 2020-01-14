@@ -47,4 +47,3 @@ class Git(object):
             output = process.stdout.readlines()
             return output, process.returncode
         return proxy
-

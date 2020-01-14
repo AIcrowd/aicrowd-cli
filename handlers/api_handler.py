@@ -39,5 +39,3 @@ class AIcrowdAPI:
 
     def get_templates(self, challengeid):
         return request_handler(lambda: requests.get(''.join((AICROWD_API, CHALLENGE_ROUTE, challengeid)), params={'fields': 'challenge_template'}))
-
-

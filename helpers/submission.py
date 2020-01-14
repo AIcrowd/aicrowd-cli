@@ -31,9 +31,3 @@ class Submission:
         self.git.push("-f submission submission-v%s" %(version_number))
         click.echo("Now you can check details of your submission at: "
                    "https://gitlab.aicrowd.com/%s/%s/issues" %(self.git_username, self.git_project_slug))
-
-
-
-
-
-
