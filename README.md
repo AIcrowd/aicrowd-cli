@@ -79,6 +79,7 @@ Below are some handy resource links.
 ## Authors
 
 * **S.P. Mohanty** - *Initial work* - [github](https://github.com/spMohanty)
+* **Nikhil Rayaprolu** - *Initial work* (Current Maintainer) - [github](https://github.com/nikhilrayaprolu)   
 
 See also the list of [contributors](https://github.com/spMohanty/aicrowd/contributors) who participated in this project.
 
