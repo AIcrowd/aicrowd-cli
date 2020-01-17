@@ -23,6 +23,7 @@ import os
 
 import click
 
+from aicrowd.access_token import access_token_command
 from aicrowd.baseline import baseline_command
 from aicrowd.challenge import challenge_command
 from aicrowd.config import Config
@@ -30,6 +31,7 @@ from aicrowd.context import pass_info, Info
 from aicrowd.convert import convert_command
 from aicrowd.dataset import dataset_command
 from aicrowd.ssh import ssh_command
+from aicrowd.status import status
 from aicrowd.submit import submit_command
 from aicrowd.template import template_command
 from helpers.ssh import SSHHandler
@@ -79,6 +81,8 @@ cli.add_command(dataset_command)
 cli.add_command(ssh_command)
 cli.add_command(submit_command)
 cli.add_command(template_command)
+cli.add_command(status)
+cli.add_command(access_token_command)
 
 @cli.command()
 def version():

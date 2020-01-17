@@ -1,3 +1,6 @@
+import os
+import shutil
+
 import click
 import wget
 
@@ -23,7 +26,9 @@ class Challenge:
         return datasets
 
     def download_dataset(self, dataset):
+        os.makedirs('data', exist_ok=True)
         dataset_name = wget.download(dataset['download_link'])
+        shutil.move(dataset_name, os.path.join('data', dataset_name))
 
     def list_baselines(self):
         response = aicrowd_api.get_baselines(self.challenge_id)

@@ -10,8 +10,9 @@ from helpers.submission import Submission
 
 @click.command(name='submit', help="Make a Submission")
 @click.argument('version_number')
+@click.option('--http', type=bool, default=False)
 @pass_info
-def submit_command(info: Info, version_number):
+def submit_command(info: Info, version_number, http):
     challenge_config = os.path.join(os.getcwd(), info.challenge_config)
     with open(challenge_config) as f:
         challenge_json = json.load(f)
@@ -24,8 +25,12 @@ def submit_command(info: Info, version_number):
         edit_challenge_config(info, challenge_json)
     home_user = os.path.expanduser('~')
     aicrowd_root = os.path.join(home_user, info.home_default)
-    print(info.private_key)
-    challenge_json['ssh_private_key'] = os.path.join(aicrowd_root, info.private_key)
-    challenge_json['personal_access_token'] = info.personal_access_token
+    if(http):
+        challenge_json['personal_access_token'] = info.personal_access_token
+        challenge_json['ssh_private_key'] = None
+    else:
+        challenge_json['personal_access_token'] = None
+        challenge_json['ssh_private_key'] = os.path.join(aicrowd_root, info.private_key)
+
     submission = Submission(**challenge_json)
     submission.submit_current_project(version_number)
