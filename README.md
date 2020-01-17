@@ -83,6 +83,6 @@ Below are some handy resource links.
 
 See also the list of [contributors](https://github.com/spMohanty/aicrowd/contributors) who participated in this project.
 
-## LicenseCopyright (c) S.P. Mohanty
+## LicenseCopyright (c) AIcrowd SA
 
 All rights reserved.
