@@ -1,4 +1,3 @@
--e git+https://github.com/AIcrowd/aicrowd-cli.git@0903f0c2d95c2938627e0badc74ad2f7e636b02a#egg=aicrowd_cli
 alabaster==0.7.12
 atomicwrites==1.3.0
 attrs==19.3.0
