@@ -1,8 +1,51 @@
+
 # aicrowd
 
 A CLI app to interact with AIcrowd 
 
+## How to install the CLI for development
+
+ -  Install the API locally https://github.com/AIcrowd/aicrowd-api
+ -  Clone this repository  https://github.com/AIcrowd/aicrowd-cli.git
+ - inside the repository `pip install -r requirements.txt`
+ - then do `python setup.py develop`
+ - And now you are good to start developing/using the features
+
+
+
+
+
+
 ## Project Features
+Before using the CLI one has to generate the ssh keys and access token required to interact with Gitlab.
+
+To generate ssh keys and upload them to Gitlab one can use:
+`aicrowd ssh create`
+
+To genereate personal access token from Gitlab one can use:
+`aicrowd access_token create`
+
+To create a folder for a challenge with challenge spec
+`aicrowd challenge init`
+the console will ask for the challenge id - challenge ids will be provided on the challenge home page
+
+Now to view all the datasets related to a challenge, (has to be run inside the challenge folder)
+`aicrowd dataset list`
+To download a dataset do:
+`aicrowd dataset download`
+
+To Start with a template for the challenge, use
+`aicrowd template list` and `aicrowd template download`
+
+To quickly start working on a baseline for the challenge you can use:
+`aicrowd baseline list` and `aicrowd baseline download`
+
+To make a submission is just a one step command:
+`aicrowd submit` (Submit requires one to have already run aicrowd ssh create)
+
+Once the submission is completed, one can check the progress of their submission by `aicrowd status`
+
+Many more commands like `aicrowd convert` and `aicrowd capture` yet to come. Stay tuned.
 
 * [aicrowd](http://aicrowd-cli.readthedocs.io/)
 * a starter [Click](http://click.pocoo.org/5/) command-line application
