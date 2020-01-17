@@ -1,0 +1,6 @@
+home_default: '.aicrowd'
+private_key: 'private.pem'
+public_key: 'public.pem'
+challenge_config: 'aicrowd.json'
+personal_access_token: ''
+

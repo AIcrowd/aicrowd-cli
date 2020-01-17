@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-A CLI app to interact with AIcrowd 
+A CLI app to interact with AIcrowd
 
 .. currentmodule:: aicrowd
 .. moduleauthor:: S.P. Mohanty <spmohanty91@gmail.com>

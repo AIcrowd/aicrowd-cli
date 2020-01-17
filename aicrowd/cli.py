@@ -19,7 +19,22 @@ Itcan be used as a handy facility for running the task from a command line.
 .. moduleauthor:: S.P. Mohanty <spmohanty91@gmail.com>
 """
 import logging
+import os
+
 import click
+
+from aicrowd.access_token import access_token_command
+from aicrowd.baseline import baseline_command
+from aicrowd.challenge import challenge_command
+from aicrowd.config import Config
+from aicrowd.context import pass_info, Info
+from aicrowd.convert import convert_command
+from aicrowd.dataset import dataset_command
+from aicrowd.ssh import ssh_command
+from aicrowd.status import status
+from aicrowd.submit import submit_command
+from aicrowd.template import template_command
+from helpers.ssh import SSHHandler
 from .__init__ import __version__
 
 LOGGING_LEVELS = {
@@ -31,17 +46,6 @@ LOGGING_LEVELS = {
 }  #: a mapping of `verbose` option counts to logging levels
 
 
-class Info(object):
-    """An information object to pass data between CLI functions."""
-
-    def __init__(self):  # Note: This object must have an empty constructor.
-        """Create a new instance."""
-        self.verbose: int = 0
-
-
-# pass_info is a decorator for functions that pass 'Info' objects.
-#: pylint: disable=invalid-name
-pass_info = click.make_pass_decorator(Info, ensure=True)
 
 
 # Change the options to below to suit the actual options for your task (or
@@ -65,15 +69,20 @@ def cli(info: Info, verbose: int):
                 fg="yellow",
             )
         )
+    config = Config()
     info.verbose = verbose
+    vars(info).update(config.settings)
 
 
-@cli.command()
-@pass_info
-def hello(_: Info):
-    """Say 'hello' to the nice people."""
-    click.echo(f"aicrowd says 'hello'")
-
+cli.add_command(baseline_command)
+cli.add_command(challenge_command)
+cli.add_command(convert_command)
+cli.add_command(dataset_command)
+cli.add_command(ssh_command)
+cli.add_command(submit_command)
+cli.add_command(template_command)
+cli.add_command(status)
+cli.add_command(access_token_command)
 
 @cli.command()
 def version():
