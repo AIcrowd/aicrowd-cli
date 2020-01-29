@@ -8,6 +8,7 @@ chardet==3.0.4
 Click==7.0
 coverage==5.0.2
 docutils==0.15.2
+emoji==0.5.4
 entrypoints==0.3
 filelock==3.0.12
 flake8==3.7.9
@@ -36,6 +37,7 @@ pyperclip==1.7.0
 pytest==3.10.1
 pytest-cov==2.8.1
 pytest-pythonpath==0.7.3
+python-gitlab==1.15.0
 pytz==2019.3
 PyYAML==5.3
 readme-renderer==24.0

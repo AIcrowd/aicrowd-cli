@@ -11,7 +11,7 @@ from helpers.nb_parser import parse
 @click.argument('notebook')
 @pass_info
 def convert_command(info: Info, notebook):
-    #TODO: Generate a Dockerfile that can read run.sh and make the respective installations
+    #TODO: Generate a Dockerfile that can read install.sh and make the respective installations
     code_file = 'code.py'
-    bash_file = 'shell.py'
+    bash_file = 'install.sh'
     parse(notebook, code_file, bash_file)
