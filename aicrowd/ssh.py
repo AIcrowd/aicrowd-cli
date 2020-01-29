@@ -22,9 +22,14 @@ def ssh_create(info: Info):
     ssh_handler = SSHHandler(private_file, public_file)
     click.echo("generating SSH keys")
     pubkey = ssh_handler.generate_keys()
-    click.echo('copied the public key to your clipboard, paste it at https://gitlab.aicrowd.com/profile/keys')
-    pyperclip.copy(pubkey.decode('ascii'))
-    click.echo('Incase of copying the public key manually, here is the public key')
+
+    try:
+        pyperclip.copy(pubkey.decode('ascii'))
+        click.echo(
+            'Automatically copied the public key to your clipboard, paste it at https://gitlab.aicrowd.com/profile/keys')
+        click.echo('Incase of copying the public key manually, here is the public key')
+    except Exception as e:
+        click.echo('copy the public key and paste it at https://gitlab.aicrowd.com/profile/keys')
     click.echo(pubkey)
 
 ssh_command.add_command(ssh_create)
