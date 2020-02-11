@@ -23,7 +23,7 @@ class Git(object):
 
     def _func_for_key(self, key):
         def proxy(cmd=None, **kwargs):
-            args = ["git", key]
+            args = ["git","lfs", key]
             if cmd:
                 args.extend(shlex.split(cmd))
             self._log("Executing command: " + " ".join(args))
