@@ -14,11 +14,11 @@ class Submission:
         self.git_username = username
         self.git_project_slug = project_slug
         print(ssh_private_key, personal_access_token, project_slug, username)
-        git_repo_username = "nikhil_rayaprolu"
+        self.git_repo_username = "nikhil_rayaprolu"
         if(ssh_private_key):
-            self.command_git_url = 'git@%s:%s/%s.git' %(GITLAB_URL, git_repo_username, self.git_project_slug)
+            self.command_git_url = 'git@%s:%s/%s.git' %(GITLAB_URL, self.git_repo_username, self.git_project_slug)
         elif personal_access_token:
-            self.command_git_url = 'https://oauth2:%s@%s/%s/%s.git' %(personal_access_token, GITLAB_URL, git_repo_username, self.git_project_slug)
+            self.command_git_url = 'https://oauth2:%s@%s/%s/%s.git' %(personal_access_token, GITLAB_URL, self.git_repo_username, self.git_project_slug)
         self.git = Git(ssh_private_key=ssh_private_key)
         self.git.remote('add submission %s' %(self.command_git_url))
         # Add remote "submission" for the project using these details
@@ -33,4 +33,4 @@ class Submission:
             self.git.tag("-am 'submission-v%s' submission-v%s" % (version_number, version_number))
             self.git.push(" submission submission-v%s" % (version_number))
             click.echo("Now you can check details of your submission at: "
-                       "https://gitlab.aicrowd.com/%s/%s/issues" % (self.git_username, self.git_project_slug))
+                       "https://gitlab.aicrowd.com/%s/%s/issues" % (self.git_repo_username, self.git_project_slug))
