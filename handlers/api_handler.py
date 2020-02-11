@@ -6,7 +6,7 @@ from requests import HTTPError
 
 headers = {'Content-Type': 'application/json'}
 
-AICROWD_API = 'http://51.79.142.104:8002/api'
+AICROWD_API = 'http://51.79.142.104/api'
 CHALLENGE_ROUTE = '/challenges/'
 BASELINE_ROUTE = '/baselines/'
 TEMPLATES_ROUTE = '/templates/'
