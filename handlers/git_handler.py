@@ -23,13 +23,17 @@ class Git(object):
 
     def _func_for_key(self, key):
         def proxy(cmd=None, **kwargs):
-            args = ["git","lfs", key]
+            if key=='push':
+                args = ["git", key]
+            else:
+                args = ["git", key]
             if cmd:
                 args.extend(shlex.split(cmd))
             self._log("Executing command: " + " ".join(args))
             git_env = os.environ.copy()
             if self.ssh:
                 git_env['GIT_SSH_COMMAND'] = 'ssh -i %s' %(self.ssh)
+            print(args)
             process = subprocess.Popen(
                 args,
                 stdin=subprocess.PIPE,

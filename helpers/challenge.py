@@ -37,7 +37,10 @@ class Challenge:
         return baselines
 
     def clone_baseline(self, baseline):
-        Git().clone('--progress ' + baseline['git_addr'])
+        try:
+            Git().clone('--progress ' + baseline['git_addr'])
+        except:
+            wget.download(baseline['git_addr'])
 
     def list_templates(self):
         response = aicrowd_api.get_templates(self.challenge_id)
