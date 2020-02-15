@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import yaml
 
@@ -21,6 +22,9 @@ class Config:
         return yaml.load(stream, Loader=yaml.SafeLoader)
 
     def dump(self, content):
+        config_dir = os.path.dirname(self.config_file)
+        if not os.path.exists(config_dir):
+            os.makedirs(config_dir, exist_ok=True)
         with open(self.config_file, "w") as f:
             yaml.dump(content, f, default_flow_style=False)
 
