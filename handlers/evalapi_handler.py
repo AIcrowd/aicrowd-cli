@@ -8,6 +8,7 @@ headers = {'Content-Type': 'application/json'}
 
 EVAL_API = 'http://evaluations-api-staging.internal.k8s.aicrowd.com/v1'
 LOGIN_ROUTE = '/auth/login'
+GRADER_ROUTE = '/graders/'
 
 def request_handler(request_func):
     try:
@@ -33,6 +34,20 @@ class EvalAPI:
         response = request_handler(lambda: requests.post(request_url, json = payload, headers = headers))
         try:
             headers['Authorization'] = response['Authorization']
+            print(headers)
         except:
             pass
+        return response
+    
+    def create_grader(self, grader_url):
+        request_url = ''.join((self.api_endpoint, GRADER_ROUTE))
+        payload = {
+            "code_access_mode": "raw",
+            "docker_username": "subsbot001",
+            "docker_password": "subsbot001",
+            "evaluation_code": grader_url
+        }
+        print(headers)
+        response = request_handler(lambda: requests.post(request_url, json = payload, headers = headers))
+        print(response)
         return response
