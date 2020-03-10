@@ -7,7 +7,7 @@ from requests import HTTPError
 headers = {'Content-Type': 'application/json'}
 
 EVAL_API = 'http://evaluations-api-staging.internal.k8s.aicrowd.com/v1'
-LOGIN_ROUTE = '/auth/login/'
+LOGIN_ROUTE = '/auth/login'
 
 def request_handler(request_func):
     try:
@@ -30,5 +30,9 @@ class EvalAPI:
             'email': email,
             'password': password
         }
-        return request_handler(lambda: requests.post(request_url, json = payload, headers = headers))
-
+        response = request_handler(lambda: requests.post(request_url, json = payload, headers = headers))
+        try:
+            headers['Authorization'] = response['Authorization']
+        except:
+            pass
+        return response

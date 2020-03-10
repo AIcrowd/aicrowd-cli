@@ -10,6 +10,6 @@ class Login:
     def __init__(self):
         pass
 
-    def login(self, email, password):
+    def login(email, password):
         response = aicrowd_api.login(email, password)
-        return email
+        return response
