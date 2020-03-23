@@ -25,8 +25,9 @@ def login(info: Info):
 @pass_info
 def new_grader(info: Info):
     grader_url = click.prompt('Enter Grader URL', type=str)
-    if Grader.create_grader(grader_url, info.evalapi_auth_token):
-        click.echo("Grader queued successfully!")
+    response = Grader.create_grader(grader_url, info.evalapi_auth_token)
+    if response:
+        click.echo(f"Grader queued successfully with ID: {response['id']}")
     else:
         click.echo("Please try again!")
 
