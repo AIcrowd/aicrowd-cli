@@ -3,6 +3,7 @@ from urllib.parse import urljoin
 
 import requests
 from requests import HTTPError
+from aicrowd.config import Config
 
 headers = {'Content-Type': 'application/json'}
 
@@ -33,13 +34,16 @@ class EvalAPI:
         }
         response = request_handler(lambda: requests.post(request_url, json = payload, headers = headers))
         try:
-            headers['Authorization'] = response['Authorization']
-            print(headers)
+            config = Config()
+            config_settings = config.settings
+            config_settings['evalapi_auth_token'] = response['Authorization']
+            config.dump(config_settings)
         except:
             pass
         return response
     
-    def create_grader(self, grader_url):
+    def create_grader(self, grader_url, auth_token):
+        headers['Authorization'] = auth_token
         request_url = ''.join((self.api_endpoint, GRADER_ROUTE))
         payload = {
             "code_access_mode": "raw",
@@ -47,7 +51,5 @@ class EvalAPI:
             "docker_password": "subsbot001",
             "evaluation_code": grader_url
         }
-        print(headers)
         response = request_handler(lambda: requests.post(request_url, json = payload, headers = headers))
-        print(response)
-        return response
+        return response 

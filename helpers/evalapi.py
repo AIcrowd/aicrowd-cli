@@ -15,6 +15,6 @@ class Auth:
         return response
     
 class Grader:
-    def create_grader(grader_url):
-        response = aicrowd_api.create_grader(grader_url)
+    def create_grader(grader_url, auth_token):
+        response = aicrowd_api.create_grader(grader_url, auth_token)
         return response
