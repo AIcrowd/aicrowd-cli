@@ -16,7 +16,10 @@ class Config:
         self.config_file = os.path.join(os.path.expanduser('~'), self.config_directory, "config.yaml")
         if (os.path.exists(self.config_file)):
             with open(self.config_file, "r") as f:
-                self.settings = self.load(f)
+                self.home_settings = self.load(f)
+                if self.home_settings:
+                    self.settings.update(self.home_settings)
+
 
     def load(self, stream):
         return yaml.load(stream, Loader=yaml.SafeLoader)
@@ -33,3 +36,4 @@ class Config:
         with open(self.config_file, "w") as f:
             self.dump(updated_list_doc, f)
             self.settings = updated_list_doc
+
