@@ -2,6 +2,7 @@ import os
 import click
 from pprint import pprint
 from aicrowd.config import Config
+import subprocess
 
 import aicrowd_evaluations
 from aicrowd_evaluations.rest import ApiException
@@ -35,10 +36,7 @@ class Evaluations:
     def grader_create(self, grader_url):
 
         payload = {
-            "code_access_mode": "raw",
-            "docker_username": "subsbot001",
-            "docker_password": "subsbot001",
-            "evaluation_code": grader_url
+            "evaluator_repo": grader_url
         }
         api_instance = aicrowd_evaluations.GradersApi(aicrowd_evaluations.ApiClient(self.configuration))
         try:
@@ -47,5 +45,32 @@ class Evaluations:
         except ApiException as e:
             print("Exception when calling GradersApi->post_grader_list_dao: %s\n" % e)
 
+class Utils:
 
+    def __init__(self):
+        self.home = '~/.aicrowd/'
+        self.examples_url = 'http://gitlab.aicrowd.com/aicrowd/evaluator-examples.git'
+        self.examples_dir = os.path.join(self.home, 'evaluator-examples')
+        self.templates_url = 'http://gitlab.aicrowd.com/aicrowd/evaluator-templates.git'
+        self.templates_dir = os.path.join(self.home, 'evaluator-templates')
+    
 
+    def list_templates(self):
+        if not os.path.exists(self.templates_dir):
+            subprocess.run(f"git clone {self.templates_url} {self.templates_dir}".split())
+        templates = [ f.name for f in os.scandir(self.templates_dir) if f.is_dir() and f.name[0] is not '.']
+        return templates
+    
+    def get_template(self, template):
+        subprocess.run(f'cp -r {os.path.join(self.templates_dir, template)} .'.split())
+        
+
+    def list_examples(self):
+        if not os.path.exists(self.examples_dir):
+            subprocess.run(f"git clone {self.examples_url} {self.examples_dir}".split())
+        examples = [ f.name for f in os.scandir(self.examples_dir) if f.is_dir() and f.name[0] is not '.']
+        return examples
+    
+    def get_example(self, example):
+        subprocess.run(f'cp -r {os.path.join(self.examples_dir, example)} .'.split())
+        
