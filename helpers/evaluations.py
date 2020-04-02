@@ -1,13 +1,12 @@
 import os
 import click
 from pprint import pprint
-from aicrowd.config import Config
 import subprocess
 import shutil
 
 import aicrowd_evaluations
 from aicrowd_evaluations.rest import ApiException
-
+from aicrowd.config import Config
 from handlers.git_handler import Git
 
 
