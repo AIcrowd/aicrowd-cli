@@ -56,6 +56,40 @@ class Utils:
         self.templates_url = 'http://gitlab.aicrowd.com/aicrowd/evaluator-templates.git'
         self.templates_dir = os.path.join(self.home, 'evaluator-templates')
 
+    def helm_validate(self, grader_url, repo_tag = 'master'):
+        
+        # Clone necessary repositories
+        os.mkdir('.validate')
+        os.chdir('.validate')
+        Git().clone(f"{grader_url} evaluator-repository")
+        os.chdir('evaluator-repository')
+        subprocess.run(f"git checkout {repo_tag}".split(), stdout=subprocess.DEVNULL)
+        Git().clone(f"{self.templates_url} evaluator-templates")
+
+        # Get the template name from aicrowd.yaml
+        with open('aicrowd.yaml', 'r') as infile:
+            proc = subprocess.Popen('yq -r .challenge.template'.split(), stdin = infile, stdout=subprocess.PIPE)
+        template = proc.stdout.read().decode('utf-8').strip()
+        print(f"Detected template name as: {template}")
+
+        # Copy the helm template to the directory having grader
+        os.mkdir('.aicrowd')
+        subprocess.run(f'cp -r evaluator-templates/{template} .aicrowd'.split())
+        subprocess.run(f'mv .aicrowd/{template}/aicrowd.yaml .aicrowd/{template}/values.yaml'.split())
+        subprocess.run(f'cd .aicrowd/{template} && chmod +x ./pre-start.sh && ./pre-start.sh && cd -'.split(), stdout=subprocess.DEVNULL, shell=True)
+        subprocess.run(f'ls | xargs -n1 -I{{}} rm -rf .aicrowd/{template}/{{}}'.split(), shell = True, stdout=subprocess.DEVNULL)
+        subprocess.run(f'cp -r * .aicrowd/{template}', shell=True)
+
+        # Expand helm templates
+        proc = subprocess.run(f'helm template --values aicrowd.yaml .aicrowd/{template} -f aicrowd.yaml > desired-fs.yaml', shell = True)
+        os.chdir('..')
+        subprocess.run(f'rm -rf .validate', shell=True)
+        if proc.returncode is 0:
+            return True
+        
+        return False
+
+
     def list_templates(self):
         if not os.path.exists(self.templates_dir):
             Git().clone(f"{self.templates_url} {self.templates_dir}")

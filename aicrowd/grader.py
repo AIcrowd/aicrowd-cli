@@ -34,11 +34,15 @@ def grader_command(info: Info):
 def create(info: Info):
     grader_url = click.prompt('Enter Grader URL', type=str)
     evaluations = Evaluations(info.evalapi_auth_token)
-    grader = evaluations.grader_create(grader_url)
-    if grader:
-        click.echo(f"Grader queued successfully with ID: {grader.id}")
-    else:
-        click.echo("Please try again!")
+    utils = Utils()
+    if utils.helm_validate(grader_url):
+        click.echo("Validated!")
+
+    #grader = evaluations.grader_create(grader_url)
+    #if grader:
+    #    click.echo(f"Grader queued successfully with ID: {grader.id}")
+    #else:
+    #    click.echo("Please try again!")
 
 @click.command(help="Download grader template")
 @pass_info
