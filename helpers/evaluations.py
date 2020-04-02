@@ -3,6 +3,7 @@ import click
 from pprint import pprint
 from aicrowd.config import Config
 import subprocess
+import shutil
 
 import aicrowd_evaluations
 from aicrowd_evaluations.rest import ApiException
@@ -82,8 +83,8 @@ class Utils:
 
         # Expand helm templates
         proc = subprocess.run(f'helm template --values aicrowd.yaml .aicrowd/{template} -f aicrowd.yaml > desired-fs.yaml', shell = True)
-        os.chdir('..')
-        subprocess.run(f'rm -rf .validate', shell=True)
+        os.chdir('../..')
+        shutil.rmtree('./.validate')
         if proc.returncode is 0:
             return True
         
