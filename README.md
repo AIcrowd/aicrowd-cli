@@ -5,8 +5,9 @@ A CLI app to interact with AIcrowd
 
 ## How to install the CLI for development
 
- -  Install the API locally https://github.com/AIcrowd/aicrowd-api
- -  Clone this repository  https://github.com/AIcrowd/aicrowd-cli.git
+ - Install the API locally https://github.com/AIcrowd/aicrowd-api
+ - Install python client for Evaluations API https://gitlab.aicrowd.com/aicrowd/evaluations-api-clients/tree/dev/python (for grader commands only)
+ - Clone this repository  https://github.com/AIcrowd/aicrowd-cli.git
  - inside the repository `pip install -r requirements.txt`
  - then do `python setup.py develop`
  - And now you are good to start developing/using the features
