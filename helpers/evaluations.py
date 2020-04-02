@@ -7,6 +7,8 @@ import subprocess
 import aicrowd_evaluations
 from aicrowd_evaluations.rest import ApiException
 
+from handlers.git_handler import Git
+
 
 class Evaluations:
 
@@ -48,16 +50,16 @@ class Evaluations:
 class Utils:
 
     def __init__(self):
-        self.home = '~/.aicrowd/'
+        self.home = os.path.join(os.path.expanduser('~'),'.aicrowd/')
         self.examples_url = 'http://gitlab.aicrowd.com/aicrowd/evaluator-examples.git'
         self.examples_dir = os.path.join(self.home, 'evaluator-examples')
         self.templates_url = 'http://gitlab.aicrowd.com/aicrowd/evaluator-templates.git'
         self.templates_dir = os.path.join(self.home, 'evaluator-templates')
-    
 
     def list_templates(self):
         if not os.path.exists(self.templates_dir):
-            subprocess.run(f"git clone {self.templates_url} {self.templates_dir}".split())
+            Git().clone(f"{self.templates_url} {self.templates_dir}")
+            #subprocess.run(f"git clone {self.templates_url} {self.templates_dir}".split())
         templates = [ f.name for f in os.scandir(self.templates_dir) if f.is_dir() and f.name[0] is not '.']
         return templates
     
@@ -67,7 +69,8 @@ class Utils:
 
     def list_examples(self):
         if not os.path.exists(self.examples_dir):
-            subprocess.run(f"git clone {self.examples_url} {self.examples_dir}".split())
+            Git().clone(f"{self.examples_url} {self.examples_dir}")
+            #subprocess.run(f"git clone {self.examples_url} {self.examples_dir}".split())
         examples = [ f.name for f in os.scandir(self.examples_dir) if f.is_dir() and f.name[0] is not '.']
         return examples
     
