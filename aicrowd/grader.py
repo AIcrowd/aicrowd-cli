@@ -35,8 +35,7 @@ def grader_command(info: Info):
 def create(info: Info, validate):
     grader_url = click.prompt('Enter Grader URL', type=str)
     evaluations = Evaluations(info.evalapi_auth_token)
-    utils = Utils()
-    if utils.helm_validate(grader_url):
+    if Utils().helm_validate(grader_url):
         click.echo("Validated!")
 
     if not validate:
@@ -49,26 +48,24 @@ def create(info: Info, validate):
 @click.command(help="Download grader template")
 @pass_info
 def templates(info: Info):
-    utils = Utils()
-    templates = utils.list_templates()
+    templates = Utils().list_templates()
 
     for idx, template in enumerate(templates):
         click.echo(f'[{idx + 1}] {template}')
 
     template_idx = click.prompt('Select the grader template you wish to download')
-    utils.get_template(templates[int(template_idx) - 1])
+    Utils().get_template(templates[int(template_idx) - 1])
 
 @click.command(help="Download grader example")
 @pass_info
 def examples(info: Info):
-    utils = Utils()
-    examples = utils.list_examples()
+    examples = Utils().list_examples()
 
     for idx, example in enumerate(examples):
         click.echo(f'[{idx + 1}] {example}')
 
     example_idx = click.prompt('Select the grader example you wish to download')
-    utils.get_example(examples[int(example_idx) - 1])
+    Utils().get_example(examples[int(example_idx) - 1])
 
 grader_command.add_command(create)
 grader_command.add_command(templates)
