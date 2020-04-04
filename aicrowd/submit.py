@@ -34,4 +34,4 @@ def submit_command(info: Info, version_number, http, dummy):
         challenge_json['ssh_private_key'] = os.path.join(aicrowd_root, info.private_key)
 
     submission = Submission(**challenge_json)
-    submission.submit_current_project(version_number, dummy)
+    submission.submit_current_project(version_number, http, dummy)

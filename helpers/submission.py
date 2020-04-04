@@ -17,18 +17,28 @@ class Submission:
         self.git_repo_username = self.git_username
         if(ssh_private_key):
             self.command_git_url = 'git@%s:%s/%s.git' %(GITLAB_URL, self.git_repo_username, self.git_project_slug)
+            self.git = Git(ssh_private_key=ssh_private_key)
+            self.git.remote('add ssh-submission %s' % (self.command_git_url))
         elif personal_access_token:
             self.command_git_url = 'https://oauth2:%s@%s/%s/%s.git' %(personal_access_token, GITLAB_URL, self.git_repo_username, self.git_project_slug)
-        self.git = Git(ssh_private_key=ssh_private_key)
-        self.git.remote('add submission %s' %(self.command_git_url))
+            self.git = Git()
+            self.git.remote('add http-submission %s' % (self.command_git_url))
+
+
         # Add remote "submission" for the project using these details
 
-    def submit_current_project(self, version_number, dummy):
+    def submit_current_project(self, version_number, http, dummy):
         current_directory = os.getcwd()
         self.git.add('.')
         self.git.commit("-m 'updated submission'")
-        self.git.push("-f submission master")
         self.git.tag("-am 'submission-v%s' submission-v%s" % (version_number, version_number))
-        self.git.push("-f submission submission-v%s" % (version_number))
+        if(http):
+            self.git.push("-f ssh-submission master")
+            self.git.push("-f ssh-submission submission-v%s" % (version_number))
+        else:
+            self.git.push("-f http-submission master")
+            self.git.push("-f http-submission submission-v%s" % (version_number))
+
+
         click.echo("Now you can check details of your submission at: "
                    "https://gitlab.aicrowd.com/%s/%s/issues" % (self.git_repo_username, self.git_project_slug))
