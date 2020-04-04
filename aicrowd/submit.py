@@ -19,7 +19,6 @@ def submit_command(info: Info, version_number, http, dummy):
         challenge_json = json.load(f)
     if not 'username' in challenge_json and not 'project_slug' in challenge_json:
         # click.echo('Please create a gitlab project at https://gitlab.aicrowd.com/projects/new')
-        click.echo('Please request access at: https://gitlab.aicrowd.com/iiit-workshop')
         username = click.prompt('Please enter your aicrowd username:', type=str)
         project_slug = click.prompt('Please enter your gitlab project:', type=str)
         challenge_json['username'] = username

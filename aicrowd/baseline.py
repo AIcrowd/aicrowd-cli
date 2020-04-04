@@ -14,11 +14,8 @@ def download(info: Info):
     baselines = challenge.list_baselines()
     for idx, baseline in enumerate(baselines):
         click.echo('[%d] %s' % (idx + 1, baseline['name']))
-    confirm = True
-    while confirm:
-        value = click.prompt('Please enter the number for the baseline you want to download', type=int)
-        challenge.clone_baseline(baselines[value-1])
-        confirm = click.confirm('Do you want to download another baseline?', abort=True)
+    value = click.prompt('Please enter the number for the baseline you want to download', type=int)
+    challenge.clone_baseline(baselines[value-1])
 
 
 @click.command(help="List the baseline")
