@@ -34,7 +34,7 @@ from aicrowd.ssh import ssh_command
 from aicrowd.status import status
 from aicrowd.submit import submit_command
 from aicrowd.template import template_command
-from aicrowd.eval import eval_command
+from aicrowd.grader import grader_command
 from helpers.ssh import SSHHandler
 from .__init__ import __version__
 
@@ -84,7 +84,7 @@ cli.add_command(submit_command)
 cli.add_command(template_command)
 cli.add_command(status)
 cli.add_command(access_token_command)
-cli.add_command(eval_command)
+cli.add_command(grader_command)
 
 @cli.command()
 def version():

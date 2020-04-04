@@ -105,3 +105,6 @@ ENV/
 # JetBrains
 .idea
 .DS_Store
+
+# VSCode
+.vscode/
