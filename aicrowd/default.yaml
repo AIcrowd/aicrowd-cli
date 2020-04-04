@@ -3,4 +3,8 @@ private_key: 'private.pem'
 public_key: 'public.pem'
 challenge_config: 'aicrowd.json'
 personal_access_token: ''
+examples_url: 'http://gitlab.aicrowd.com/aicrowd/evaluator-examples.git'
+examples_dir: '.aicrowd/evaluator-examples'
+templates_url: 'http://gitlab.aicrowd.com/aicrowd/evaluator-templates.git'
+templates_dir: './aicrowd/evaluator-templates'
 

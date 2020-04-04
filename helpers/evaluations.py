@@ -50,11 +50,9 @@ class Evaluations:
 class Utils:
 
     def __init__(self):
-        self.home = os.path.join(os.path.expanduser('~'),'.aicrowd/')
-        self.examples_url = 'http://gitlab.aicrowd.com/aicrowd/evaluator-examples.git'
-        self.examples_dir = os.path.join(self.home, 'evaluator-examples')
-        self.templates_url = 'http://gitlab.aicrowd.com/aicrowd/evaluator-templates.git'
-        self.templates_dir = os.path.join(self.home, 'evaluator-templates')
+        self.config = Config()
+        self.templates_dir = os.path.join(os.path.expanduser('~'), self.config.settings['templates_dir'])
+        self.examples_dir = os.path.join(os.path.expanduser('~'), self.config.settings['examples_dir'])
 
     def helm_validate(self, grader_url, repo_tag = 'master'):
         
@@ -64,7 +62,7 @@ class Utils:
         Git().clone(f"{grader_url} evaluator-repository")
         os.chdir('evaluator-repository')
         subprocess.run(f"git checkout {repo_tag}".split(), stdout=subprocess.DEVNULL)
-        Git().clone(f"{self.templates_url} evaluator-templates")
+        Git().clone(f"{self.config.settings['templates_url']} evaluator-templates")
 
         # Get the template name from aicrowd.yaml
         with open('aicrowd.yaml', 'r') as infile:
@@ -92,8 +90,8 @@ class Utils:
 
     def list_templates(self):
         if not os.path.exists(self.templates_dir):
-            Git().clone(f"{self.templates_url} {self.templates_dir}")
-            #subprocess.run(f"git clone {self.templates_url} {self.templates_dir}".split())
+            Git().clone(f"{self.config.settings['templates_url']} {self.templates_dir}")
+            #subprocess.run(f"git clone {self.config.settings['templates_url']} {self.templates_dir}".split())
         templates = [ f.name for f in os.scandir(self.templates_dir) if f.is_dir() and f.name[0] is not '.']
         return templates
     
@@ -103,8 +101,8 @@ class Utils:
 
     def list_examples(self):
         if not os.path.exists(self.examples_dir):
-            Git().clone(f"{self.examples_url} {self.examples_dir}")
-            #subprocess.run(f"git clone {self.examples_url} {self.examples_dir}".split())
+            Git().clone(f"{self.config.settings['examples_url']} {self.examples_dir}")
+            #subprocess.run(f"git clone {self.config.settings['examples_url']} {self.examples_dir}".split())
         examples = [ f.name for f in os.scandir(self.examples_dir) if f.is_dir() and f.name[0] is not '.']
         return examples
     

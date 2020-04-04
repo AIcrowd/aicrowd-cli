@@ -55,7 +55,7 @@ def templates(info: Info):
     for idx, template in enumerate(templates):
         click.echo(f'[{idx + 1}] {template}')
 
-    template_idx = click.prompt('Select the template')
+    template_idx = click.prompt('Select the grader template you wish to download')
     utils.get_template(templates[int(template_idx) - 1])
 
 @click.command(help="Download grader example")
@@ -67,7 +67,7 @@ def examples(info: Info):
     for idx, example in enumerate(examples):
         click.echo(f'[{idx + 1}] {example}')
 
-    example_idx = click.prompt('Select the template')
+    example_idx = click.prompt('Select the grader example you wish to download')
     utils.get_example(examples[int(example_idx) - 1])
 
 grader_command.add_command(create)
