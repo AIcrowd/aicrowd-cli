@@ -19,13 +19,10 @@ class Evaluations:
         self.configuration.api_key['AUTHORIZATION'] = key
     
     def login(self, email, password):
-        payload = {
-            "email": email,
-            "password": password
-        }
+        payload = aicrowd_evaluations.Login(email=email, password=password)
         api_instance = aicrowd_evaluations.AuthApi(aicrowd_evaluations.ApiClient(self.configuration))
         try:
-            api_response = api_instance.post_user_login(payload)
+            api_response = api_instance.login(payload)
             config = Config()
             config_settings = config.settings
             config_settings['evalapi_auth_token'] = api_response.authorization
@@ -36,13 +33,10 @@ class Evaluations:
 
 
     def grader_create(self, grader_url):
-
-        payload = {
-            "evaluator_repo": grader_url
-        }
+        payload = aicrowd_evaluations.Grader(evaluator_repo=grader_url)
         api_instance = aicrowd_evaluations.GradersApi(aicrowd_evaluations.ApiClient(self.configuration))
         try:
-            api_response = api_instance.post_grader_list_dao(payload)
+            api_response = api_instance.create_grader(payload)
             return api_response
         except ApiException as e:
             print("Exception when calling GradersApi->post_grader_list_dao: %s\n" % e)
