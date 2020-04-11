@@ -10,30 +10,21 @@ from aicrowd.config import Config
 
 
 @click.group(name="grader", short_help="Grader related commands for the evaluations API")
-@pass_info
-def grader_command(info: Info):
-    try:
-        info.evalapi_auth_token
-    except AttributeError:
-        click.echo(f"Login to continue")
-        evaluations = Evaluations()
-        while True:
-            email = click.prompt('Email', type=str)
-            password = click.prompt('Password', type=str)
-            if evaluations.login(email, password):
-                break
-            click.echo("Please try again!")            
-        click.echo(f"Logged in successfully!")
-        config = Config()
-        vars(info).update(config.settings)
-        
+def grader_command():
+    pass
         
 
 @click.command(help="Create Grader")
 @click.option('--validate', '-v', is_flag = True)
+@click.argument('grader_url')
 @pass_info
-def create(info: Info, validate):
-    grader_url = click.prompt('Enter Grader URL', type=str)
+def create(info: Info, validate, grader_url):
+    try:
+        info.evalapi_auth_token
+    except:
+        click.echo("Credentials not found: Please login using 'aicrowd evaluations login'")
+        return
+    
     evaluations = Evaluations(info.evalapi_auth_token)
     if Utils().helm_validate(grader_url):
         click.echo("Validated!")
