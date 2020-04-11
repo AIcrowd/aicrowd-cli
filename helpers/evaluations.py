@@ -50,37 +50,42 @@ class Utils:
 
     def helm_validate(self, grader_url, repo_tag = 'master'):
         
-        # Clone necessary repositories
-        if not os.path.exists('.validate'):
-            os.mkdir('.validate')
-        os.chdir('.validate')
-        subprocess.run(f"git clone -q {grader_url} evaluator-repository".split(), stdout=subprocess.DEVNULL)
-        #Git().clone(f"{grader_url} evaluator-repository")
-        os.chdir('evaluator-repository')
-        subprocess.run(f"git checkout -q {repo_tag}".split(), stdout=subprocess.DEVNULL)
-        subprocess.run(f"git clone -q {self.config.settings['templates_url']} evaluator-templates".split(), stdout=subprocess.DEVNULL)
-        #Git().clone(f"{self.config.settings['templates_url']} evaluator-templates")
+        try:
+            # Clone necessary repositories
+            if not os.path.exists('.validate'):
+                os.mkdir('.validate')
+            os.chdir('.validate')
+            subprocess.run(f"git clone -q {grader_url} evaluator-repository".split(), stdout=subprocess.DEVNULL)
+            #Git().clone(f"{grader_url} evaluator-repository")
+            os.chdir('evaluator-repository')
+            subprocess.run(f"git checkout -q {repo_tag}".split(), stdout=subprocess.DEVNULL)
+            subprocess.run(f"git clone -q {self.config.settings['templates_url']} evaluator-templates".split(), stdout=subprocess.DEVNULL)
+            #Git().clone(f"{self.config.settings['templates_url']} evaluator-templates")
 
-        # Get the template name from aicrowd.yaml
-        with open('aicrowd.yaml', 'r') as infile:
-            proc = subprocess.Popen('yq -r .challenge.template'.split(), stdin = infile, stdout=subprocess.PIPE)
-        template = proc.stdout.read().decode('utf-8').strip()
-        print(f"Detected template name as: {template}")
+            # Get the template name from aicrowd.yaml
+            with open('aicrowd.yaml', 'r') as infile:
+                proc = subprocess.Popen('yq -r .challenge.template'.split(), stdin = infile, stdout=subprocess.PIPE)
+            template = proc.stdout.read().decode('utf-8').strip()
+            print(f"Detected template name as: {template}")
 
-        # Copy the helm template to the directory having grader
-        os.mkdir('.aicrowd')
-        subprocess.run(f'cp -r evaluator-templates/{template} .aicrowd'.split())
-        subprocess.run(f'mv .aicrowd/{template}/aicrowd.yaml .aicrowd/{template}/values.yaml'.split())
-        subprocess.run(f'cd .aicrowd/{template} && chmod +x ./pre-start.sh && ./pre-start.sh && cd -'.split(), stdout=subprocess.DEVNULL, shell=True)
-        subprocess.run(f'ls | xargs -n1 -I{{}} rm -rf .aicrowd/{template}/{{}}'.split(), shell = True, stdout=subprocess.DEVNULL)
-        subprocess.run(f'cp -r * .aicrowd/{template}', shell=True)
+            # Copy the helm template to the directory having grader
+            os.mkdir('.aicrowd')
+            subprocess.run(f'cp -r evaluator-templates/{template} .aicrowd'.split())
+            subprocess.run(f'mv .aicrowd/{template}/aicrowd.yaml .aicrowd/{template}/values.yaml'.split())
+            subprocess.run(f'cd .aicrowd/{template} && chmod +x ./pre-start.sh && ./pre-start.sh && cd -'.split(), stdout=subprocess.DEVNULL, shell=True)
+            subprocess.run(f'ls | xargs -n1 -I{{}} rm -rf .aicrowd/{template}/{{}}'.split(), shell = True, stdout=subprocess.DEVNULL)
+            subprocess.run(f'cp -r * .aicrowd/{template}', shell=True)
 
-        # Expand helm templates
-        proc = subprocess.run(f'helm template --values aicrowd.yaml .aicrowd/{template} -f aicrowd.yaml > desired-fs.yaml', shell = True)
-        os.chdir('../..')
-        shutil.rmtree('./.validate')
-        if proc.returncode is 0:
-            return True
+            # Expand helm templates
+            proc = subprocess.run(f'helm template --values aicrowd.yaml .aicrowd/{template} -f aicrowd.yaml > desired-fs.yaml', shell = True)
+            os.chdir('../..')
+            shutil.rmtree('./.validate')
+            if proc.returncode is 0:
+                return True
+        except Exception as e:
+            print(e)
+            os.chdir('../..')
+            shutil.rmtree('./.validate')
         
         return False
 
