@@ -31,9 +31,9 @@ def grader_command(info: Info):
 
 @click.command(help="Create Grader")
 @click.option('--validate', '-v', is_flag = True)
+@click.argument('grader_url')
 @pass_info
-def create(info: Info, validate):
-    grader_url = click.prompt('Enter Grader URL', type=str)
+def create(info: Info, validate, grader_url):
     evaluations = Evaluations(info.evalapi_auth_token)
     if Utils().helm_validate(grader_url):
         click.echo("Validated!")

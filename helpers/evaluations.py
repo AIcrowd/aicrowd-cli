@@ -51,12 +51,15 @@ class Utils:
     def helm_validate(self, grader_url, repo_tag = 'master'):
         
         # Clone necessary repositories
-        os.mkdir('.validate')
+        if not os.path.exists('.validate'):
+            os.mkdir('.validate')
         os.chdir('.validate')
-        Git().clone(f"{grader_url} evaluator-repository")
+        subprocess.run(f"git clone -q {grader_url} evaluator-repository".split(), stdout=subprocess.DEVNULL)
+        #Git().clone(f"{grader_url} evaluator-repository")
         os.chdir('evaluator-repository')
-        subprocess.run(f"git checkout {repo_tag}".split(), stdout=subprocess.DEVNULL)
-        Git().clone(f"{self.config.settings['templates_url']} evaluator-templates")
+        subprocess.run(f"git checkout -q {repo_tag}".split(), stdout=subprocess.DEVNULL)
+        subprocess.run(f"git clone -q {self.config.settings['templates_url']} evaluator-templates".split(), stdout=subprocess.DEVNULL)
+        #Git().clone(f"{self.config.settings['templates_url']} evaluator-templates")
 
         # Get the template name from aicrowd.yaml
         with open('aicrowd.yaml', 'r') as infile:
