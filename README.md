@@ -13,38 +13,81 @@ A CLI app to interact with AIcrowd
  - And now you are good to start developing/using the features
 
 
-
-
-
-
 ## Project Features
 Before using the CLI one has to generate the ssh keys and access token required to interact with Gitlab.
 
-To generate ssh keys and upload them to Gitlab one can use:
-`aicrowd ssh create`
+- To generate ssh keys and upload them to Gitlab:
+```bash
+aicrowd ssh create
+```
 
-To genereate personal access token from Gitlab one can use:
-`aicrowd access_token create`
+- To genereate personal access token from Gitlab:
+```bash
+aicrowd access_token create
+```
 
-To create a folder for a challenge with challenge spec
-`aicrowd challenge init`
-the console will ask for the challenge id - challenge ids will be provided on the challenge home page
+- To create a folder for a challenge with challenge spec:
+```bash
+aicrowd challenge init
+```
+The console will ask for the challenge id (which will be provided on the challenge home page)
 
-Now to view all the datasets related to a challenge, (has to be run inside the challenge folder)
-`aicrowd dataset list`
-To download a dataset do:
-`aicrowd dataset download`
+- To view all the datasets related to a challenge, (has to be run inside the challenge folder):
+```bash
+aicrowd dataset list
+```
 
-To Start with a template for the challenge, use
-`aicrowd template list` and `aicrowd template download`
+- To download a dataset:
+```bash
+aicrowd dataset download
+```
 
-To quickly start working on a baseline for the challenge you can use:
-`aicrowd baseline list` and `aicrowd baseline download`
+- To Start with a template for the challenge:
+```bash
+aicrowd template list
+aicrowd template download
+```
 
-To make a submission is just a one step command:
-`aicrowd submit` (Submit requires one to have already run aicrowd ssh create)
+- To quickly start working on a baseline for the challenge:
+```bash
+aicrowd baseline list
+aicrowd baseline download
+```
 
-Once the submission is completed, one can check the progress of their submission by `aicrowd status`
+- To make a submission:
+```bash
+aicrowd submit
+```
+(Submit requires one to have already run aicrowd ssh create)
+
+- To check the proogress of the submission once submitted: 
+```bash
+aicrowd status
+```
+
+### AIcrowd Evaluations-API Commands
+
+- First, log in into the service:
+
+```bash
+aicrowd evaluations login -e <email> -p <password>
+```
+
+- To create a grader:
+```bash
+aicrowd grader create <grader-repository-url>
+```
+Use option (-v , --validate) to just validate grader repository
+
+- To download a grader template:
+```bash
+aicrowd grader templates
+```
+
+- To download a grader example:
+```bash
+aicrowd grader examples
+```
 
 Many more commands like `aicrowd convert` and `aicrowd capture` yet to come. Stay tuned.
 
