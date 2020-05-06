@@ -65,29 +65,39 @@ aicrowd submit
 aicrowd status
 ```
 
-### AIcrowd Evaluations-API Commands
+### AIcrowd Evaluations API Commands
 
-- First, log in into the service:
+Login and save the auth token locally.
 
 ```bash
 aicrowd evaluations login -e <email> -p <password>
 ```
 
-- To create a grader:
-```bash
-aicrowd grader create <grader-repository-url>
-```
-Use option (-v , --validate) to just validate grader repository
+Validate the grader repository
 
-- To download a grader template:
 ```bash
-aicrowd grader templates
+git clone <grader_repository>
+cd <repository>
+aicrowd evaluations grader create --repo <grader_repository> --validate
 ```
 
-- To download a grader example:
+Creating a creader
+
 ```bash
-aicrowd grader examples
+git clone <grader_repository>
+cd <repository>
+aicrowd evaluations grader create --repo <grader_repository>
 ```
+
+Passing the secrets when creating grader
+
+```bash
+aicrowd evaluations grader create \ 
+    --repo <grader_repository> \ 
+    -s secret1=value \ 
+    -s secret2=value
+```
+
 
 Many more commands like `aicrowd convert` and `aicrowd capture` yet to come. Stay tuned.
 
