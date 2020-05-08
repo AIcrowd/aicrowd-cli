@@ -67,13 +67,13 @@ aicrowd status
 
 ### AIcrowd Evaluations API Commands
 
-Login and save the auth token locally.
+- Login and save the auth token locally.
 
 ```bash
 aicrowd evaluations login -e <email> -p <password>
 ```
 
-Validate the grader repository
+- Validate the grader repository
 
 ```bash
 git clone <grader_repository>
@@ -81,7 +81,7 @@ cd <repository>
 aicrowd evaluations grader create --repo <grader_repository> --validate
 ```
 
-Creating a grader
+- Creating a grader
 
 ```bash
 git clone <grader_repository>
@@ -89,7 +89,7 @@ cd <repository>
 aicrowd evaluations grader create --repo <grader_repository>
 ```
 
-Creating a grader and deploying to aicrowd
+- Creating a grader and deploying to AIcrowd
 
 ```bash
 aicrowd keys add -k AICROWD_API_KEY=<aicrowd_api_key>
@@ -99,7 +99,7 @@ aicrowd evaluations grader create --repo <grader_repository> --deploy
 ```
 
 
-Passing the secrets when creating grader
+- Passing the secrets when creating grader
 
 ```bash
 aicrowd evaluations grader create \ 
