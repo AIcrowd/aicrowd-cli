@@ -81,13 +81,23 @@ cd <repository>
 aicrowd evaluations grader create --repo <grader_repository> --validate
 ```
 
-Creating a creader
+Creating a grader
 
 ```bash
 git clone <grader_repository>
 cd <repository>
 aicrowd evaluations grader create --repo <grader_repository>
 ```
+
+Creating a grader and deploying to aicrowd
+
+```bash
+aicrowd keys add -k AICROWD_API_KEY=<aicrowd_api_key>
+git clone <grader_repository>
+cd <repository>
+aicrowd evaluations grader create --repo <grader_repository> --deploy
+```
+
 
 Passing the secrets when creating grader
 
