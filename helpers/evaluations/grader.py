@@ -11,6 +11,7 @@ from aicrowd.config import Config
 from aicrowd import fmt
 from helpers.evaluations import HELM_REPO, API_HOST
 from helpers.evaluations.auth import api_configuration
+from handlers.rails_api_handler import RailsAPI
 
 
 def parse_secrets(secrets):
@@ -204,3 +205,12 @@ def create(cluster_id, repo, parsed_secrets, repo_tag, meta, auth_token):
     )
     api_response = api_instance.create_grader(payload)
     return api_response
+
+def deploy(grader_id):
+    """Update challenge with grader on AIcrowd"""
+    with open("./aicrowd.yaml") as fp:
+        challenge_slug = yaml.safe_load(fp)["challenge"]["name"]
+    config = Config()
+    rails_api = RailsAPI(config.settings['AICROWD_API_KEY'])
+    response = rails_api.deploy_grader(challenge_slug, grader_id)
+    return response['url']

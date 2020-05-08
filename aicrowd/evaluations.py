@@ -4,14 +4,14 @@ import click
 from aicrowd_evaluations.rest import ApiException
 from aicrowd import fmt
 from aicrowd.context import pass_info
-from helpers.evaluations import AUTH_TOKEN_KEY, Errors, API_HOST
+from helpers.evaluations import AUTH_TOKEN_KEY, AICROWD_API_KEY, Errors, API_HOST
 from helpers.evaluations.grader import (
     parse_secrets,
     validate as validate_grader,
     create as create_grader,
+    deploy as deploy_grader
 )
 from helpers.evaluations.auth import login
-
 
 @click.group(
     name="evaluations", short_help="Commands to interact with AIcrowd Evaluations API"
@@ -31,7 +31,7 @@ def grader_cmd():
 def submission_cmd():
     """Create a submission using AIcrowd Evaluations API"""
     pass
-
+    
 
 @click.command(name="create")
 @click.option(
@@ -44,8 +44,9 @@ def submission_cmd():
 @click.option(
     "--validate", is_flag=True, help="Validate the grader setup without creating one"
 )
+@click.option("--deploy", is_flag=True, help="Deploy the grader to aicrowd after creating one")
 @pass_info
-def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate):
+def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate, deploy):
     """Create a grader using AIcrowd Evaluations API"""
     parsed_secrets = parse_secrets(secrets)
 
@@ -60,6 +61,14 @@ def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate)
     fmt.echo_info("Validation completed.")
 
     if not validate:
+        if deploy:
+            try:
+                aicrowd_api_key = getattr(info, AICROWD_API_KEY)
+            except AttributeError:
+                fmt.echo_error(
+                    "AIcrowd API key not found (deployment): Please add it using `aicrowd keys add AICROWD_API_KEY=<key>`"
+                )
+                sys.exit(Errors.auth)
         try:
             auth_token = getattr(info, AUTH_TOKEN_KEY)
         except AttributeError:
@@ -73,6 +82,13 @@ def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate)
         except ApiException as e:
             fmt.echo_error(e)
             sys.exit(Errors.api)
+        if deploy:
+            try:
+                #challenge_url = deploy_grader(response.id)
+                challenge_url = deploy_grader(57)
+                fmt.echo(f"Deployed Grader for challenge: {challenge_url}")
+            except ApiException as e:
+                fmt.echo_error(e)
 
 
 @click.command(name="login", help="Login to AIcrowd Evaluations API")
