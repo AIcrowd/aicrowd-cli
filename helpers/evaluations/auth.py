@@ -7,6 +7,7 @@ from helpers.evaluations import API_HOST, AUTH_TOKEN_KEY
 def api_configuration(auth_key=None):
     configuration = aicrowd_evaluations.Configuration()
     configuration.host = API_HOST
+    configuration.verify_ssl = False
     if auth_key:
         configuration.api_key["AUTHORIZATION"] = auth_key
     return configuration
