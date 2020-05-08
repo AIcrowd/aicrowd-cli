@@ -84,8 +84,7 @@ def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate,
             sys.exit(Errors.api)
         if deploy:
             try:
-                #challenge_url = deploy_grader(response.id)
-                challenge_url = deploy_grader(57)
+                challenge_url = deploy_grader(response.id)
                 fmt.echo(f"Deployed Grader for challenge: {challenge_url}")
             except ApiException as e:
                 fmt.echo_error(e)
