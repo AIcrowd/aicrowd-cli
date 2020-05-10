@@ -53,7 +53,6 @@ def submission_cmd():
 @click.option(
     "--validate", is_flag=True, help="Validate the grader setup without creating one"
 )
-@click.option("--deploy", is_flag=True, help="Deploy the grader to aicrowd after creating one")
 @pass_info
 def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate, deploy):
     """Create a grader using AIcrowd Evaluations API"""
@@ -70,14 +69,6 @@ def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate,
     fmt.echo_info("Validation completed.")
 
     if not validate:
-        if deploy:
-            try:
-                aicrowd_api_key = getattr(info, AICROWD_API_KEY)
-            except AttributeError:
-                fmt.echo_error(
-                    "AIcrowd API key not found (deployment): Please add it using `aicrowd keys add AICROWD_API_KEY=<key>`"
-                )
-                sys.exit(Errors.auth)
         auth_token = getattr(info, AUTH_TOKEN_KEY)
         try:
             response = create_grader(cluster_id, repo, parsed_secrets, repo_tag, meta, auth_token)
@@ -85,12 +76,6 @@ def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate,
         except ApiException as e:
             fmt.echo_error(e)
             sys.exit(Errors.api)
-        if deploy:
-            try:
-                challenge_url = deploy_grader(response.id)
-                fmt.echo(f"Deployed Grader for challenge: {challenge_url}")
-            except ApiException as e:
-                fmt.echo_error(e)
 
 @click.command(name="status", help="Get status of the grader")
 @click.option("--grader_id", "-g", required=True, help="ID of the grader")
@@ -102,8 +87,24 @@ def grader_status_cmd(info, grader_id):
         fmt.echo(response.status)
     except ApiException as e:
         fmt.echo_error(e)
-        sys.exit(Errors.api)    
+        sys.exit(Errors.api)   
 
+@click.command(name="deploy", help="Deploy the grader on AIcrowd")
+@click.option("--grader_id", "-g", required=True, help="ID of the grader")
+@pass_info
+def deploy_grader_cmd(info, grader_id):
+    try:
+        aicrowd_api_key = getattr(info, AICROWD_API_KEY)
+    except AttributeError:
+        fmt.echo_error(
+            "AIcrowd API key not found: Please add it using `aicrowd keys add AICROWD_API_KEY=<key>`"
+        )
+        sys.exit(Errors.auth) 
+    try:
+        challenge_url = deploy_grader(grader_id, aicrowd_api_key)
+        fmt.echo(f"Deployed Grader for challenge: {challenge_url}")
+    except ApiException as e:
+        fmt.echo_error(e)
  
 
 
@@ -121,6 +122,7 @@ def login_cmd(info, email, password):
 
 
 grader_cmd.add_command(create_grader_cmd)
+grader_cmd.add_command(deploy_grader_cmd)
 grader_cmd.add_command(grader_status_cmd)
 evaluations_cmd.add_command(login_cmd)
 evaluations_cmd.add_command(grader_cmd)

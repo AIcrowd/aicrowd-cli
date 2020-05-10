@@ -216,12 +216,11 @@ def get(grader_id, auth_token):
     api_response = api_instance.get_grader(grader_id=grader_id)
     return api_response
 
-def deploy(grader_id):
+def deploy(grader_id, aicrowd_api_key):
     """Update challenge with grader on AIcrowd"""
     with open("./aicrowd.yaml") as fp:
         challenge_slug = yaml.safe_load(fp)["challenge"]["name"]
-    config = Config()
-    rails_api = RailsAPI(config.settings['AICROWD_API_KEY'])
+    rails_api = RailsAPI(aicrowd_api_key)
     response = rails_api.deploy_grader(challenge_slug, grader_id)
     return response['url']
 
