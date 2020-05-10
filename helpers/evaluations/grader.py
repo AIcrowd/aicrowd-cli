@@ -206,6 +206,16 @@ def create(cluster_id, repo, parsed_secrets, repo_tag, meta, auth_token):
     api_response = api_instance.create_grader(payload)
     return api_response
 
+def get(grader_id, auth_token):
+    """Make GET request to Evaluations API"""
+    configuration = api_configuration(auth_token)
+
+    api_instance = aicrowd_evaluations.GradersApi(
+        aicrowd_evaluations.ApiClient(configuration)
+    )
+    api_response = api_instance.get_grader(grader_id=grader_id)
+    return api_response
+
 def deploy(grader_id):
     """Update challenge with grader on AIcrowd"""
     with open("./aicrowd.yaml") as fp:
@@ -214,3 +224,4 @@ def deploy(grader_id):
     rails_api = RailsAPI(config.settings['AICROWD_API_KEY'])
     response = rails_api.deploy_grader(challenge_slug, grader_id)
     return response['url']
+

@@ -9,7 +9,9 @@ from helpers.evaluations.grader import (
     parse_secrets,
     validate as validate_grader,
     create as create_grader,
+    get as get_grader,
     deploy as deploy_grader
+
 )
 from helpers.evaluations.auth import login
 
@@ -89,6 +91,24 @@ def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate,
             except ApiException as e:
                 fmt.echo_error(e)
 
+@click.command(name="status", help="Get status of the grader")
+@click.option("--grader_id", "-g", required=True, help="ID of the grader")
+@pass_info
+def grader_status_cmd(info, grader_id):
+    try:
+        auth_token = getattr(info, AUTH_TOKEN_KEY)
+    except AttributeError:
+        fmt.echo_error(
+            "Incorrect credentials: Please login using `aicrowd evaluations login`"
+        )
+        sys.exit(Errors.auth)
+    try:
+        response = get_grader(grader_id, auth_token)
+        fmt.echo(response.status)
+    except ApiException as e:
+        fmt.echo_error(e)
+        sys.exit(Errors.api)     
+
 
 @click.command(name="login", help="Login to AIcrowd Evaluations API")
 @click.option("--email", "-e", required=True)
@@ -104,6 +124,7 @@ def login_cmd(info, email, password):
 
 
 grader_cmd.add_command(create_grader_cmd)
+grader_cmd.add_command(grader_status_cmd)
 evaluations_cmd.add_command(login_cmd)
 evaluations_cmd.add_command(grader_cmd)
 evaluations_cmd.add_command(submission_cmd)
