@@ -13,20 +13,18 @@ from helpers.evaluations.grader import (
     deploy as deploy_grader
 
 )
+from helpers.evaluations.submission import (
+    create as create_submission
+)
 from helpers.evaluations.auth import login
 
 @click.group(
     name="evaluations", short_help="Commands to interact with AIcrowd Evaluations API"
 )
-def evaluations_cmd():
-    """Interact with AIcrowd Evaluations API"""
-    pass
 
-
-@click.group(name="grader")
 @pass_info
-def grader_cmd(info):
-    """Create or delete a grader using AIcrowd Evaluations API"""
+def evaluations_cmd(info):
+    """Interact with AIcrowd Evaluations API"""
     try:
         auth_token = getattr(info, AUTH_TOKEN_KEY)
     except AttributeError:
@@ -34,6 +32,12 @@ def grader_cmd(info):
             "Incorrect credentials: Please login using `aicrowd evaluations login`"
         )
         sys.exit(Errors.auth)
+
+
+@click.group(name="grader")
+def grader_cmd():
+    """Create or delete a grader using AIcrowd Evaluations API"""
+    pass
 
 
 @click.group(name="submission")
@@ -107,6 +111,23 @@ def deploy_grader_cmd(info, grader_id):
         fmt.echo_error(e)
  
 
+@click.command(name="create")
+@click.option("--file", "-f", required=True, help="Submission file")
+@click.option("--grader_id", "-g", required=True, help="ID of the grader")
+@click.option("--wait", is_flag=True, help="Wait for submission to complete")
+@pass_info
+def create_submission_cmd(info, file, grader_id, wait):
+    """Create a submission using AIcrowd Evaluations API"""
+
+    auth_token = getattr(info, AUTH_TOKEN_KEY)
+    try:
+        response = create_submission(grader_id, file, wait, auth_token)
+        fmt.echo(f"Created submission: {API_HOST}/submissions/{response.id}")
+        if wait:
+            fmt.echo(response.status)
+    except ApiException as e:
+        fmt.echo_error(e)
+        sys.exit(Errors.api)
 
 @click.command(name="login", help="Login to AIcrowd Evaluations API")
 @click.option("--email", "-e", required=True)
@@ -121,9 +142,12 @@ def login_cmd(info, email, password):
     fmt.echo_info("Logged in successfully!")
 
 
+
+
 grader_cmd.add_command(create_grader_cmd)
 grader_cmd.add_command(deploy_grader_cmd)
 grader_cmd.add_command(grader_status_cmd)
+submission_cmd.add_command(create_submission_cmd)
 evaluations_cmd.add_command(login_cmd)
 evaluations_cmd.add_command(grader_cmd)
 evaluations_cmd.add_command(submission_cmd)
