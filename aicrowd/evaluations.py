@@ -57,7 +57,7 @@ def submission_cmd():
 )
 @click.option("--wait", is_flag=True, help="Wait for grader to complete")
 @pass_info
-def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate):
+def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate, wait):
     """Create a grader using AIcrowd Evaluations API"""
     parsed_secrets = parse_secrets(secrets)
 
@@ -76,6 +76,8 @@ def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate)
         try:
             response = create_grader(cluster_id, repo, parsed_secrets, repo_tag, meta, wait, auth_token)
             fmt.echo(f"Created grader: {API_HOST}/graders/{response.id}")
+            if wait and response.status == "Failed":
+                sys.exit(Errors.api)
         except ApiException as e:
             fmt.echo_error(e)
             sys.exit(Errors.api)
@@ -122,8 +124,8 @@ def create_submission_cmd(info, file, grader_id, wait):
     try:
         response = create_submission(grader_id, file, wait, auth_token)
         fmt.echo(f"Created submission: {API_HOST}/submissions/{response.id}")
-        if wait:
-            fmt.echo(response.status)
+        if wait and response.status == "Failed":
+            sys.exit(Errors.api)
     except ApiException as e:
         fmt.echo_error(e)
         sys.exit(Errors.api)
