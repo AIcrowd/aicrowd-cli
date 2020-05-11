@@ -33,11 +33,17 @@ def evaluations_cmd(info):
         )
         sys.exit(Errors.auth)
 
-
+@pass_info
 @click.group(name="grader")
 def grader_cmd():
     """Create or delete a grader using AIcrowd Evaluations API"""
-    pass
+    try:
+        auth_token = getattr(info, AUTH_TOKEN_KEY)
+    except AttributeError:
+        fmt.echo_error(
+            "Incorrect credentials: Please login using `aicrowd evaluations login`"
+        )
+        sys.exit(Errors.auth)
 
 
 @click.group(name="submission")
