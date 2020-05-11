@@ -21,13 +21,13 @@ from helpers.evaluations.auth import login
 @click.group(
     name="evaluations", short_help="Commands to interact with AIcrowd Evaluations API"
 )
-def evaluations_cmd(info):
+def evaluations_cmd():
     """Interact with AIcrowd Evaluations API"""
     pass
 
 @pass_info
 @click.group(name="grader")
-def grader_cmd():
+def grader_cmd(info):
     """Create or delete a grader using AIcrowd Evaluations API"""
     try:
         auth_token = getattr(info, AUTH_TOKEN_KEY)
