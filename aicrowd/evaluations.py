@@ -25,8 +25,8 @@ def evaluations_cmd():
     """Interact with AIcrowd Evaluations API"""
     pass
 
-@pass_info
 @click.group(name="grader")
+@pass_info
 def grader_cmd(info):
     """Create or delete a grader using AIcrowd Evaluations API"""
     try:
@@ -56,7 +56,7 @@ def submission_cmd():
     "--validate", is_flag=True, help="Validate the grader setup without creating one"
 )
 @pass_info
-def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate, deploy):
+def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate):
     """Create a grader using AIcrowd Evaluations API"""
     parsed_secrets = parse_secrets(secrets)
 
