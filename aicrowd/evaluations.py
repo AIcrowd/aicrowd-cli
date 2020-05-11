@@ -55,6 +55,7 @@ def submission_cmd():
 @click.option(
     "--validate", is_flag=True, help="Validate the grader setup without creating one"
 )
+@click.option("--wait", is_flag=True, help="Wait for grader to complete")
 @pass_info
 def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate):
     """Create a grader using AIcrowd Evaluations API"""
@@ -73,7 +74,7 @@ def create_grader_cmd(info, cluster_id, repo, secrets, repo_tag, meta, validate)
     if not validate:
         auth_token = getattr(info, AUTH_TOKEN_KEY)
         try:
-            response = create_grader(cluster_id, repo, parsed_secrets, repo_tag, meta, auth_token)
+            response = create_grader(cluster_id, repo, parsed_secrets, repo_tag, meta, wait, auth_token)
             fmt.echo(f"Created grader: {API_HOST}/graders/{response.id}")
         except ApiException as e:
             fmt.echo_error(e)

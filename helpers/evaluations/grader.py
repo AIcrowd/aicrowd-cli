@@ -188,8 +188,18 @@ def load_config():
     settings.arch = "amd64"
     return conf_dir, settings
 
+def wait_to_complete(api, method, object_id, timeout=60 * 15):
+    start_time = time.time()
+    f = getattr(api, method)
+    response = f(object_id)
+    while response.status not in ["Failed", "Completed"] and (
+        start_time - time.time() < timeout
+    ):
+        time.sleep(15)
+        response = f(object_id)
+    return response
 
-def create(cluster_id, repo, parsed_secrets, repo_tag, meta, auth_token):
+def create(cluster_id, repo, parsed_secrets, repo_tag, meta, wait, auth_token):
     """Make post request to Evaluations API"""
     configuration = api_configuration(auth_token)
 
@@ -204,6 +214,8 @@ def create(cluster_id, repo, parsed_secrets, repo_tag, meta, auth_token):
         meta=meta,
     )
     api_response = api_instance.create_grader(payload)
+    if wait:
+        api_response = wait_to_complete(api_instance, "get_grader", api_response.id)
     return api_response
 
 def get(grader_id, auth_token):
