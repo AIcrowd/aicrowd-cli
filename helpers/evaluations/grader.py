@@ -11,6 +11,7 @@ from aicrowd.config import Config
 from aicrowd import fmt
 from helpers.evaluations import HELM_REPO, API_HOST
 from helpers.evaluations.auth import api_configuration
+from handlers.rails_api_handler import RailsAPI
 
 
 def parse_secrets(secrets):
@@ -187,8 +188,18 @@ def load_config():
     settings.arch = "amd64"
     return conf_dir, settings
 
+def wait_to_complete(api, method, object_id, timeout=60 * 15):
+    start_time = time.time()
+    f = getattr(api, method)
+    response = f(object_id)
+    while response.status not in ["Failed", "Completed"] and (
+        start_time - time.time() < timeout
+    ):
+        time.sleep(15)
+        response = f(object_id)
+    return response
 
-def create(cluster_id, repo, parsed_secrets, repo_tag, meta, auth_token):
+def create(cluster_id, repo, parsed_secrets, repo_tag, meta, wait, auth_token):
     """Make post request to Evaluations API"""
     configuration = api_configuration(auth_token)
 
@@ -203,4 +214,25 @@ def create(cluster_id, repo, parsed_secrets, repo_tag, meta, auth_token):
         meta=meta,
     )
     api_response = api_instance.create_grader(payload)
+    if wait:
+        api_response = wait_to_complete(api_instance, "get_grader", api_response.id)
     return api_response
+
+def get(grader_id, auth_token):
+    """Make GET request to Evaluations API"""
+    configuration = api_configuration(auth_token)
+
+    api_instance = aicrowd_evaluations.GradersApi(
+        aicrowd_evaluations.ApiClient(configuration)
+    )
+    api_response = api_instance.get_grader(grader_id=grader_id)
+    return api_response
+
+def deploy(grader_id, aicrowd_api_key):
+    """Update challenge with grader on AIcrowd"""
+    with open("./aicrowd.yaml") as fp:
+        challenge_slug = yaml.safe_load(fp)["challenge"]["name"]
+    rails_api = RailsAPI(aicrowd_api_key)
+    response = rails_api.deploy_grader(challenge_slug, grader_id)
+    return response['url']
+
