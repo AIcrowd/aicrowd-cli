@@ -17,7 +17,7 @@ def wait_to_complete(api, method, object_id, timeout=60 * 15):
     start_time = time.time()
     f = getattr(api, method)
     response = f(object_id)
-    while response.status not in ["Failed", "Completed"] and (
+    while response.status is not "Completed" and (
         start_time - time.time() < timeout
     ):
         time.sleep(15)
