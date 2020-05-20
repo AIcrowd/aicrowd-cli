@@ -124,7 +124,7 @@ def create_submission_cmd(info, file, grader_id, wait):
     try:
         response = create_submission(grader_id, file, wait, auth_token)
         fmt.echo(f"Created submission: {API_HOST}/submissions/{response.id}")
-        if wait and response.status == "Evaluation failed":
+        if wait and response.output == "Evaluation failed":
             sys.exit(Errors.api)
     except ApiException as e:
         fmt.echo_error(e)
