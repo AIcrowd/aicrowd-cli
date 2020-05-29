@@ -11,6 +11,7 @@ import aicrowd_evaluations
 from aicrowd.config import Config
 from aicrowd import fmt
 from helpers.evaluations.auth import api_configuration
+from helpers.evaluations import AICROWD_API_KEY
 
 
 def wait_to_complete(api, method, object_id, timeout=60 * 15):
@@ -36,7 +37,7 @@ def create(grader_id, file_path, wait, auth_token):
         aicrowd_evaluations.ApiClient(configuration)
     )
     payload = aicrowd_evaluations.Submissions(
-        meta='{"round_id": 0, "participant_id": 0}',
+        meta=f'{{"round_id": 0, "participant_id": 0, "submission_id": 0, "challenge_client_name": "{grader_id}", "domain_name":"https://www.aicrowd.com", "aicrowd_token":"{AICROWD_API_KEY}"}}',
         grader_id=grader_id,
         submission_data={"type": submission_type, "code": submission_code}
     )
