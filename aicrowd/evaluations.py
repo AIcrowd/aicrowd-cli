@@ -122,8 +122,9 @@ def create_submission_cmd(info, file, file_type, grader_id, wait):
     """Create a submission using AIcrowd Evaluations API"""
 
     auth_token = getattr(info, AUTH_TOKEN_KEY)
+    aicrowd_api_key = getattr(info, AICROWD_API_KEY)
     try:
-        response = create_submission(grader_id, file, file_type, wait, auth_token)
+        response = create_submission(grader_id, file, file_type, wait, auth_token, aicrowd_api_key)
         fmt.echo(f"Created submission: {API_HOST}/submissions/{response.id}")
         if wait and response.output == "Evaluation failed":
             sys.exit(Errors.api)
