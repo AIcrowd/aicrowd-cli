@@ -4,7 +4,6 @@ import re
 import yaml
 import subprocess
 import shutil
-import wget
 import platform
 import time
 import aicrowd_evaluations
@@ -27,10 +26,10 @@ def wait_to_complete(api, method, object_id, timeout=60 * 15):
     return response
 
 
-def create(grader_id, file_path, wait, auth_token):
+def create(grader_id, file_type, file_path, wait, auth_token):
     """Make post request to Evaluations API"""
     submission_code = open(file_path, "r").read()
-    submission_type = file_path.split('.')[-1]
+    submission_type = file_type
     configuration = api_configuration(auth_token)
 
     api_instance = aicrowd_evaluations.SubmissionsApi(

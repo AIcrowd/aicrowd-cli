@@ -114,15 +114,16 @@ def deploy_grader_cmd(info, grader_id):
 
 @click.command(name="create")
 @click.option("--file", "-f", required=True, help="Submission file")
+@click.option("--file_type", "-t", required=True, help="Submission file type")
 @click.option("--grader_id", "-g", required=True, help="ID of the grader")
 @click.option("--wait", is_flag=True, help="Wait for submission to complete")
 @pass_info
-def create_submission_cmd(info, file, grader_id, wait):
+def create_submission_cmd(info, file, file_type, grader_id, wait):
     """Create a submission using AIcrowd Evaluations API"""
 
     auth_token = getattr(info, AUTH_TOKEN_KEY)
     try:
-        response = create_submission(grader_id, file, wait, auth_token)
+        response = create_submission(grader_id, file, file_type, wait, auth_token)
         fmt.echo(f"Created submission: {API_HOST}/submissions/{response.id}")
         if wait and response.output == "Evaluation failed":
             sys.exit(Errors.api)
