@@ -4,13 +4,13 @@ import re
 import yaml
 import subprocess
 import shutil
-import wget
 import platform
 import time
 import aicrowd_evaluations
 from aicrowd.config import Config
 from aicrowd import fmt
 from helpers.evaluations.auth import api_configuration
+from helpers.evaluations import AICROWD_API_KEY
 
 
 def wait_to_complete(api, method, object_id, timeout=60 * 15):
@@ -26,17 +26,17 @@ def wait_to_complete(api, method, object_id, timeout=60 * 15):
     return response
 
 
-def create(grader_id, file_path, wait, auth_token):
+def create(grader_id, file_path, file_type, wait, auth_token, aicrowd_api_key):
     """Make post request to Evaluations API"""
     submission_code = open(file_path, "r").read()
-    submission_type = file_path.split('.')[-1]
+    submission_type = file_type
     configuration = api_configuration(auth_token)
 
     api_instance = aicrowd_evaluations.SubmissionsApi(
         aicrowd_evaluations.ApiClient(configuration)
     )
     payload = aicrowd_evaluations.Submissions(
-        meta='{"round_id": 0, "participant_id": 0}',
+        meta=f'{{"round_id": 0, "participant_id": 0, "submission_id": 0, "challenge_client_name": "{grader_id}", "domain_name":"https://www.aicrowd.com", "aicrowd_token":"{aicrowd_api_key}"}}',
         grader_id=grader_id,
         submission_data={"type": submission_type, "code": submission_code}
     )

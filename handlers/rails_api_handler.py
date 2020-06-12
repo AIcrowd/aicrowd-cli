@@ -1,10 +1,11 @@
 import json
 from urllib.parse import urljoin
+import os
 
 import requests
 from requests import HTTPError
 
-BASE_URL = 'https://www.aicrowd.com/api/v1/challenges/'
+BASE_URL = os.getenv('AICROWD_API_ENDPOINT', 'https://aicrowd.com/api/v1')
 
 def request_handler(request_func):
     try:
@@ -19,7 +20,7 @@ def request_handler(request_func):
 
 class RailsAPI:
     def __init__(self, auth_token):
-        self.api_endpoint = BASE_URL
+        self.api_endpoint = BASE_URL + '/challenges'
         self.headers = {'Content-Type': 'application/json', 'Authorization': f'Token token="{auth_token}"'}
 
     def deploy_grader(self, challenge_slug, grader_id):
