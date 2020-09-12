@@ -26,10 +26,8 @@ def wait_to_complete(api, method, object_id, timeout=60 * 15):
     return response
 
 
-def create(grader_id, file_path, file_type, wait, auth_token, aicrowd_api_key):
+def create(grader_id, url, wait, auth_token, aicrowd_api_key):
     """Make post request to Evaluations API"""
-    submission_code = open(file_path, "r").read()
-    submission_type = file_type
     configuration = api_configuration(auth_token)
 
     api_instance = aicrowd_evaluations.SubmissionsApi(
@@ -38,7 +36,7 @@ def create(grader_id, file_path, file_type, wait, auth_token, aicrowd_api_key):
     payload = aicrowd_evaluations.Submissions(
         meta=f'{{"round_id": 0, "participant_id": 0, "submission_id": 0, "challenge_client_name": "{grader_id}", "domain_name":"https://www.aicrowd.com", "aicrowd_token":"{aicrowd_api_key}"}}',
         grader_id=grader_id,
-        submission_data={"type": submission_type, "code": submission_code}
+        submission_data={"url": url,}
     )
     api_response = api_instance.create_submission(payload)
     if wait:
