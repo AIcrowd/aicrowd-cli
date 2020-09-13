@@ -234,5 +234,5 @@ def deploy(grader_id, aicrowd_api_key):
         challenge_slug = yaml.safe_load(fp)["challenge"]["name"]
     rails_api = RailsAPI(aicrowd_api_key)
     response = rails_api.deploy_grader(challenge_slug, grader_id)
-    return response['url']
+    return response
 

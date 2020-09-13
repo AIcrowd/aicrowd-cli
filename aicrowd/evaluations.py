@@ -106,7 +106,7 @@ def deploy_grader_cmd(info, grader_id):
         )
         sys.exit(Errors.auth) 
     try:
-        challenge_url = deploy_grader(grader_id, aicrowd_api_key)
+        challenge_url = deploy_grader(grader_id, aicrowd_api_key)["url"]
         fmt.echo(f"Deployed Grader for challenge: {challenge_url}")
     except ApiException as e:
         fmt.echo_error(e)

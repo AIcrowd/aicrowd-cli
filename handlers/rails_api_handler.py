@@ -5,7 +5,7 @@ import os
 import requests
 from requests import HTTPError
 
-BASE_URL = os.getenv('AICROWD_API_ENDPOINT', 'https://aicrowd.com/api/v1')
+BASE_URL = os.getenv('AICROWD_API_ENDPOINT', 'https://www.aicrowd.com/api/v1')
 
 def request_handler(request_func):
     try:
