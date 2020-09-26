@@ -19,7 +19,6 @@ Itcan be used as a handy facility for running the task from a command line.
 .. moduleauthor:: S.P. Mohanty <spmohanty91@gmail.com>
 """
 import logging
-import os
 
 import click
 
@@ -30,6 +29,7 @@ from aicrowd.config import Config
 from aicrowd.context import pass_info, Info
 from aicrowd.convert import convert_command
 from aicrowd.dataset import dataset_command
+from aicrowd.login import login_command
 from aicrowd.ssh import ssh_command
 from aicrowd.status import status
 from aicrowd.submit import submit_command
@@ -46,8 +46,6 @@ LOGGING_LEVELS = {
     3: logging.INFO,
     4: logging.DEBUG,
 }  #: a mapping of `verbose` option counts to logging levels
-
-
 
 
 # Change the options to below to suit the actual options for your task (or
@@ -79,6 +77,7 @@ def cli(info: Info, verbose: int):
 cli.add_command(baseline_command)
 cli.add_command(challenge_command)
 cli.add_command(convert_command)
+cli.add_command(login_command)
 cli.add_command(dataset_command)
 cli.add_command(ssh_command)
 cli.add_command(submit_command)
@@ -87,6 +86,7 @@ cli.add_command(status)
 cli.add_command(access_token_command)
 cli.add_command(evaluations_cmd)
 cli.add_command(keys_command)
+
 
 @cli.command()
 def version():
