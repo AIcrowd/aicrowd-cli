@@ -7,5 +7,4 @@ examples_url: 'http://gitlab.aicrowd.com/aicrowd/evaluator-examples.git'
 examples_dir: '.aicrowd/evaluator-examples'
 templates_url: 'http://gitlab.aicrowd.com/aicrowd/evaluator-templates.git'
 templates_dir: './aicrowd/evaluator-templates'
-helm_version: '2.16.6'
-
+helm_version: '2.17.0'
