@@ -46,7 +46,7 @@ def submission_cmd():
 
 @click.command(name="create")
 @click.option(
-    "--cluster-id", default=1, type=int, help="Cluster to use for evaluations"
+    "--cluster-id", default=1, type=int, envvar="EVALUATION_CLUSTER_ID", help="Cluster to use for evaluations"
 )
 @click.option("--repo", required=True, help="Git URL of the grader repo (SSH format)")
 @click.option("--secrets", "-s", multiple=True, help="Secrets to be passed")
