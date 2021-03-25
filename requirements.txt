@@ -39,7 +39,7 @@ pytest-cov==2.8.1
 pytest-pythonpath==0.7.3
 python-gitlab==1.15.0
 pytz==2019.3
-PyYAML==5.3
+PyYAML==5.4
 readme-renderer==24.0
 requests==2.22.0
 requests-toolbelt==0.9.1
